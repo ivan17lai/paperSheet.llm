@@ -1,9 +1,7 @@
 # paperSheet.llm
 convert paper forms into Excel sheet via llm
 
-'''
-pip install google-generativeai pandas openpyxl pillow
-'''
+<pre lang="markdown"><code>```bash pip install google-generativeai pandas openpyxl pillow ```</code></pre>
 
 Create api.key
 Get your Gemini 2.0 Flash-Lite API Key
