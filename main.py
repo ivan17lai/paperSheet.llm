@@ -20,18 +20,8 @@ def init_gemini(api_key):
     return genai.GenerativeModel('gemini-2.0-flash-lite')
 
 def analyze_image(model, image_path, prompt="""
-        請把表格中填寫的資訊用json格式回傳，請給我準確真實的結果，沒有重複項目，也沒有遺漏項目。我需要的項目為
-            {
-            "學校名稱": "",
-            "學校地址": "",
-            "指導老師": "",
-            "參賽者聯絡電話": "",
-            "組別": "",
-            "姓名": "",
-            "指導老師聯絡電話": "",
-            "就讀學校": ""
-            }
-    """):
+        請把表格中填寫的資訊用json格式回傳，請給我準確真實的結果，沒有重複項目，也沒有遺漏項目。
+    """,title=""):
 
     try:
         image = Image.open(image_path)
