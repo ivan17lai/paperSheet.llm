@@ -6,6 +6,7 @@ Convert paper forms into Excel sheet via LLM
 <pre lang="markdown"><code>git clone https://github.com/ivan17lai/paperSheet.llm.git</code></pre>
 
 🔑 Create api.key｜建立 API 金鑰
+
 Get your Gemini 2.0 Flash-Lite API Key
 取得 Gemini 2.0 Flash-Lite 的 API 金鑰（可到 Google AI Studio 申請）
 Save it in a file named api.key (same folder as main.py)
