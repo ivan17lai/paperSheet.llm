@@ -20,7 +20,7 @@ def init_gemini(api_key):
     return genai.GenerativeModel('gemini-2.0-flash-lite')
 
 def analyze_image(model, image_path, prompt="""
-        請把表格中填寫的資訊用json格式回傳，請給我準確真實的結果，沒有重複項目，也沒有遺漏項目。
+        請把表格中對應欄位填寫的資訊用json格式回傳(回應只包含json格式內容)，請給我準確真實的結果，沒有重複項目，也沒有遺漏項目。
     """,title=""):
 
     prompt += title
@@ -47,11 +47,14 @@ file_paths = select_images()
 
 all_results = []
 
-json_sample = []
-with open("sample.txt", "r", encoding="utf-8") as f:
-        content = f.read()
-        json_sample = content
-        print("start >>　"+content)
+api_key = load_api_key()
+model = init_gemini(api_key)
+title_get_prompt = """
+請回傳所有你在裡面找到的"欄位名稱"，不要有重複提取或是錯誤的內容，用["",""]回傳，除了[]不要有其他內容
+"""
+json_sample = analyze_image(model, file_paths[0],title_get_prompt)
+print("提取到的欄位:"+json_sample)
+json_sample += "以上是我要提取的欄位"
 
 total_files = len(file_paths)
 for idx, image_path in enumerate(file_paths, start=1):
@@ -61,8 +64,6 @@ for idx, image_path in enumerate(file_paths, start=1):
         print(f"找不到指定的圖片檔案：{image_path}")
     else:
         try:
-            api_key = load_api_key()
-            model = init_gemini(api_key)
             result = analyze_image(model, image_path,title=json_sample)
             try:
                 match = re.search(r"```json(.*?)```", result, re.DOTALL)
@@ -70,6 +71,7 @@ for idx, image_path in enumerate(file_paths, start=1):
                     result = match.group(1).strip()
                 json_result = json.loads(result)
                 all_results.append(json_result)
+                print(json_result)
             except Exception as e:
                 print("無法將結果轉換為 JSON：", e)
                 print(result)
@@ -86,7 +88,6 @@ for idx, image_path in enumerate(file_paths, start=1):
         time.sleep(2.5 - elapsed)
 
 print() 
-
 
 
 if all_results:
