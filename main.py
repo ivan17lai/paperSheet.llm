@@ -23,6 +23,8 @@ def analyze_image(model, image_path, prompt="""
         請把表格中填寫的資訊用json格式回傳，請給我準確真實的結果，沒有重複項目，也沒有遺漏項目。
     """,title=""):
 
+    prompt += title
+
     try:
         image = Image.open(image_path)
         response = model.generate_content([image, prompt])
@@ -44,6 +46,13 @@ root.withdraw()
 file_paths = select_images()
 
 all_results = []
+
+json_sample = []
+with open("sample.txt", "r", encoding="utf-8") as f:
+        content = f.read()
+        json_sample = content
+        print("start >>　"+content)
+
 total_files = len(file_paths)
 for idx, image_path in enumerate(file_paths, start=1):
     start_time = time.time()
@@ -54,7 +63,7 @@ for idx, image_path in enumerate(file_paths, start=1):
         try:
             api_key = load_api_key()
             model = init_gemini(api_key)
-            result = analyze_image(model, image_path)
+            result = analyze_image(model, image_path,title=json_sample)
             try:
                 match = re.search(r"```json(.*?)```", result, re.DOTALL)
                 if match:
