@@ -66,6 +66,8 @@ for idx, image_path in enumerate(file_paths, start=1):
         try:
             result = analyze_image(model, image_path,title=json_sample)
             try:
+                result.replace("[","")
+                result.replace("]","")
                 match = re.search(r"```json(.*?)```", result, re.DOTALL)
                 if match:
                     result = match.group(1).strip()
